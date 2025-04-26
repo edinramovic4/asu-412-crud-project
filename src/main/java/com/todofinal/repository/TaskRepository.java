@@ -21,11 +21,6 @@ public class TaskRepository {
         return jdbcTemplate.query(sql, new TaskRowMapper());
     }
 
-    public List<Task> getAllTasksByCompleted(boolean completed) {
-        String sql = "SELECT * FROM task WHERE completed = ?";
-        return jdbcTemplate.query(sql, new TaskRowMapper(), completed ? 1 : 0);
-    }
-
     public int toggleAllTasks(boolean completed) {
         String sql = "UPDATE task SET completed = ?";
         return jdbcTemplate.update(sql, completed ? 1 : 0);
