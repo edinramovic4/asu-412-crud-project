@@ -12,4 +12,8 @@ public interface TaskService {
     void updateTask(Long id, Task taskDetails);
 
     void deleteTask(Long id);
+
+    void createParentAndChildTask(String parentTitle, String childTitle);
+
+    int toggleTasks(List<Long> taskIds, boolean completed);
 }

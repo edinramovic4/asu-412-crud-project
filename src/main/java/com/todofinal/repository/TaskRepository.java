@@ -21,9 +21,19 @@ public class TaskRepository {
         return jdbcTemplate.query(sql, new TaskRowMapper());
     }
 
-    public int toggleAllTasks(boolean completed) {
-        String sql = "UPDATE task SET completed = ?";
-        return jdbcTemplate.update(sql, completed ? 1 : 0);
+    public int toggleTasks(List<Long> taskIds, boolean completed) {
+        if (taskIds == null || taskIds.isEmpty()) {
+            return 0;
+        }
+
+        String inSql = String.join(",", java.util.Collections.nCopies(taskIds.size(), "?"));
+        String sql = String.format("UPDATE task SET completed = ? WHERE id IN (%s)", inSql);
+
+        List<Object> params = new java.util.ArrayList<>();
+        params.add(completed ? 1 : 0);
+        params.addAll(taskIds);
+
+        return jdbcTemplate.update(sql, params.toArray());
     }
 
     public Task getTaskById(Long id) {
@@ -44,6 +54,22 @@ public class TaskRepository {
     public int deleteTask(Long id) {
         String sql = "DELETE FROM task WHERE id = ?";
         return jdbcTemplate.update(sql, id);
+    }
+
+    public void createParentAndChildTask(String parentTitle, String childTitle) {
+        jdbcTemplate.update("BEGIN TRANSACTION");
+        try {
+            String parentSql = "INSERT INTO task (title, completed, parent_id) VALUES (?, 0, NULL)";
+            jdbcTemplate.update(parentSql, parentTitle);
+
+            String childSql = "INSERT INTO task (title, completed, parent_id) VALUES (?, 0, (SELECT last_insert_rowid()))";
+            jdbcTemplate.update(childSql, childTitle);
+
+            jdbcTemplate.update("COMMIT");
+        } catch (Exception e) {
+            jdbcTemplate.update("ROLLBACK");
+            throw e;
+        }
     }
 
     private static class TaskRowMapper implements RowMapper<Task> {

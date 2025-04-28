@@ -37,4 +37,14 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         taskRepository.deleteTask(id);
     }
+
+    @Override
+    public void createParentAndChildTask(String parentTitle, String childTitle) {
+        taskRepository.createParentAndChildTask(parentTitle, childTitle);
+    }
+
+    @Override
+    public int toggleTasks(List<Long> taskIds, boolean completed) {
+        return taskRepository.toggleTasks(taskIds, completed);
+    }
 }

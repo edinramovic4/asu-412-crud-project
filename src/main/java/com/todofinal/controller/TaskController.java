@@ -34,4 +34,14 @@ public class TaskController {
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
+
+    @PostMapping("/parent-child")
+    public void createParentAndChild(@RequestParam String parentTitle, @RequestParam String childTitle) {
+        taskService.createParentAndChildTask(parentTitle, childTitle);
+    }
+
+    @PutMapping("/toggle")
+    public void toggleTasks(@RequestParam List<Long> taskIds, @RequestParam boolean completed) {
+        taskService.toggleTasks(taskIds, completed);
+    }
 }

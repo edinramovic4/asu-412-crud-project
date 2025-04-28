@@ -1,0 +1,81 @@
+<div class="task-container">
+  <div class="tabs">
+    <button (click)="filterTasks('all')" [class.active]="selectedTab === 'all'">All</button>
+    <button (click)="filterTasks('active')" [class.active]="selectedTab === 'active'">Active</button>
+    <button (click)="filterTasks('completed')" [class.active]="selectedTab === 'completed'">Completed</button>
+  </div>
+  <br>
+
+  <div class="forms">
+    <input type="text" placeholder="Enter Task Title" [(ngModel)]="newTaskTitle">
+    <button (click)="createSingleTask()">Add Task</button>
+    <br><br>
+    <input type="text" placeholder="Enter Parent Task Title" [(ngModel)]="parentTaskTitle">
+    <input type="text" placeholder="Enter Child Task Title" [(ngModel)]="childTaskTitle">
+    <button (click)="createParentAndChildTask()">Add Parent + Child</button>
+  </div>
+
+  <br>
+  <div class="toggle-all">
+    <button *ngIf="selectedTab === 'active' || selectedTab === 'completed'"
+            (click)="toggleAllTasks()">
+      Toggle Active/Inactive All
+    </button>
+  </div>
+  <br>
+
+  <table class="task-table" border="1" cellspacing="0" cellpadding="8">
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Completed</th>
+      <th>Actions</th>
+      <th>Last Updated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let task of displayedTasks">
+      <tr>
+        <td>
+          <ng-container *ngIf="editingTaskId !== task.id; else editMode">
+            <strong>{{ task.title }}</strong>
+          </ng-container>
+          <ng-template #editMode>
+            <input [(ngModel)]="editingTitle" />
+            <button (click)="saveEdit(task)">Save</button>
+            <button (click)="cancelEdit()">Cancel</button>
+          </ng-template>
+        </td>
+        <td>
+          <input type="checkbox" [checked]="task.completed" (change)="toggleTaskCompleted(task)">
+        </td>
+        <td>
+          <button (click)="startEdit(task)">✏️</button>
+          <button (click)="deleteTask(task)">🗑️</button>
+        </td>
+        <td>{{ task.lastUpdated }}</td>
+      </tr>
+      <tr *ngFor="let child of task.children">
+        <td style="padding-left: 40px;">
+          <ng-container *ngIf="editingTaskId !== child.id; else childEditMode">
+            ↳ {{ child.title }}
+          </ng-container>
+          <ng-template #childEditMode>
+            <input [(ngModel)]="editingTitle" />
+            <button (click)="saveEdit(child)">Save</button>
+            <button (click)="cancelEdit()">Cancel</button>
+          </ng-template>
+        </td>
+        <td>
+          <input type="checkbox" [checked]="child.completed" (change)="toggleTaskCompleted(child)">
+        </td>
+        <td>
+          <button (click)="startEdit(child)">✏️</button>
+          <button (click)="deleteTask(child)">🗑️</button>
+        </td>
+        <td>{{ child.lastUpdated }}</td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>
