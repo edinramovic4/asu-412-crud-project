@@ -44,7 +44,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public int toggleTasks(List<Long> taskIds, boolean completed) {
-        return taskRepository.toggleTasks(taskIds, completed);
+    public void toggleTasks(List<Long> taskIds, boolean completed) {
+        taskRepository.toggleTasks(taskIds, completed);
+    }
+
+    @Override
+    public void deleteAllCompletedTasks() {
+        taskRepository.deleteAllCompletedTasks();
     }
 }

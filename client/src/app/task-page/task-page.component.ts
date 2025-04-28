@@ -161,4 +161,10 @@ export class TaskPageComponent implements OnInit {
       this.loadTasks();
     });
   }
+
+  clearCompletedTasks(): void {
+    this.taskService.clearCompletedTasks().subscribe(() => {
+      this.loadTasks();
+    });
+  }
 }

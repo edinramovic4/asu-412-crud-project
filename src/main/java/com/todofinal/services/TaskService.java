@@ -15,5 +15,7 @@ public interface TaskService {
 
     void createParentAndChildTask(String parentTitle, String childTitle);
 
-    int toggleTasks(List<Long> taskIds, boolean completed);
+    void toggleTasks(List<Long> taskIds, boolean completed);
+
+    void deleteAllCompletedTasks();
 }

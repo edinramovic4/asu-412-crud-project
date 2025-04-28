@@ -72,6 +72,17 @@ public class TaskRepository {
         }
     }
 
+    public void deleteAllCompletedTasks() {
+        jdbcTemplate.update("BEGIN TRANSACTION");
+        try {
+            jdbcTemplate.update("DELETE FROM task WHERE completed = 1");
+            jdbcTemplate.update("COMMIT");
+        } catch (Exception e) {
+            jdbcTemplate.update("ROLLBACK");
+            throw e;
+        }
+    }
+
     private static class TaskRowMapper implements RowMapper<Task> {
         @Override
         public Task mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -41,4 +41,8 @@ export class TaskService {
 
     return this.http.post(`${this.baseUrl}/parent-child`, {}, { params });
   }
+
+  clearCompletedTasks(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/clear`);
+  }
 }

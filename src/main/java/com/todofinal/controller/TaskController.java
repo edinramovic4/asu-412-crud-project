@@ -44,4 +44,9 @@ public class TaskController {
     public void toggleTasks(@RequestParam List<Long> taskIds, @RequestParam boolean completed) {
         taskService.toggleTasks(taskIds, completed);
     }
+
+    @DeleteMapping("/clear")
+    public void deleteAllCompletedTasks() {
+        taskService.deleteAllCompletedTasks();
+    }
 }

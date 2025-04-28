@@ -21,6 +21,11 @@
             (click)="toggleAllTasks()">
       Toggle Active/Inactive All
     </button>
+    <button *ngIf="selectedTab === 'completed'"
+            (click)="clearCompletedTasks()"
+            style="margin-left: 10px; background-color: #dc3545;">
+      Clear Completed Tasks
+    </button>
   </div>
   <br>
 
